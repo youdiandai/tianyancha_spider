@@ -12,13 +12,13 @@ import sys
 COLUMN = [('name', u'公司名称'), ('created', u'创建时间'), ('financing', u'融资情况'), ('local', u'所在地'), ('desc', u'简介')]
 
 
-def create_excel(json_name, excel_name=None):
-    excel_name = excel_name if excel_name else json_name.split('.')[0] + '.xls'
+def create_excel(j_name, e_name=None):
+    e_name = e_name if e_name else j_name.split('.')[0] + '.xls'
     # 防止名字格式错误
-    excel_name = excel_name.split('.')[0] + '.xls'
+    e_name = e_name.split('.')[0] + '.xls'
     w = pyExcelerator.Workbook()
     ws = w.add_sheet('sheet1')
-    with open(json_name, 'rb') as f:
+    with open(j_name, 'rb') as f:
         a = f.read()
     companies = json.loads(a)
 
@@ -28,7 +28,7 @@ def create_excel(json_name, excel_name=None):
     for x in range(len(companies)):
         for y in range(len(COLUMN)):
             ws.write(x + 1, y, companies[x][COLUMN[y][0]])
-    w.save(excel_name)
+    w.save(e_name)
 
 
 if __name__ == '__main__':

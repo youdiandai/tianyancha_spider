@@ -16,4 +16,5 @@ class TianyanchaItem(scrapy.Item):
     created = scrapy.Field()
     local = scrapy.Field()
     desc = scrapy.Field()
+    tags = scrapy.Field()
 

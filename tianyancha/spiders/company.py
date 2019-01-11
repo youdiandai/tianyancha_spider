@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from tianyancha.items import TianyanchaItem
-import time
+import jieba
+from collections import Counter
 
 
 class CompanySpider(scrapy.Spider):
@@ -11,6 +12,11 @@ class CompanySpider(scrapy.Spider):
 
     @staticmethod
     def get_company(response):
+        """
+        解析页面获取company对象
+        :param response:
+        :return:
+        """
         company = TianyanchaItem()
         company['name'] = response.xpath('//*[@id="project_web_top"]/div[2]/div[1]/div/text()')[0].extract()
         company['financing'] = \
@@ -23,6 +29,7 @@ class CompanySpider(scrapy.Spider):
             response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[3]/text()')[0].extract().split(u'：')[
                 1]
         company['desc'] = response.xpath('//*[@id="_container_desc"]/text()')[0].extract()
+        company['tags'] = response.xpath('//div[@class="tags"]/a/text()').extract()
         return company
 
     def parse(self, response):
