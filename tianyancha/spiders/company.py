@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from tianyancha.items import TianyanchaItem
-import jieba
-from collections import Counter
 
 
 class CompanySpider(scrapy.Spider):
@@ -44,17 +42,11 @@ class CompanySpider(scrapy.Spider):
 
     def follow_up_parse(self, response):
         yield CompanySpider.get_company(response)
-        print("meta depth:" + str(response.meta['depth']))
         if int(response.meta['depth']) <= 2:
             jingpin = response.xpath("//div[@id='_container_jinpin']")[0].xpath('table/tbody/tr')
             try:
                 for x in jingpin:
                     url = x.xpath('td[2]/table/tbody/tr/td[2]/a/@href')[0].extract()
-                    print("*" * 20)
-                    print("*" * 20)
-                    print(u'抛出新url:' + url)
-                    print("*" * 20)
-                    print("*" * 20)
                     yield scrapy.Request(url, meta={'depth': response.meta['depth'] + 1}, callback=self.follow_up_parse)
             except Exception:
                 pass
