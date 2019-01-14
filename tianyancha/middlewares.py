@@ -70,6 +70,7 @@ class TianyanchaDownloaderMiddleware(object):
         self.browser = webdriver.Chrome('/Users/changxin/Documents/chromedriver')
         # self.browser = webdriver.PhantomJS()
         self.browser.get('https://www.tianyancha.com')
+        time.sleep(2)
         a = self.browser.find_element_by_xpath('//*[@id="web-content"]/div/div[1]/div[1]/div/div/div[2]/div/div[4]/a')
         a.click()
         b = self.browser.find_elements_by_xpath("//div[@tyc-event-ch='LoginPage.PasswordLogin']")[0]
@@ -101,6 +102,7 @@ class TianyanchaDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        time.sleep(2)
         self.browser.get(request.url)
         return HtmlResponse(url=request.url, body=self.browser.page_source, request=request, encoding='utf-8',
                             status=200)

@@ -15,23 +15,28 @@ class CompanySpider(scrapy.Spider):
         :param response:
         :return:
         """
-        company = TianyanchaItem()
-        company['name'] = response.xpath('//*[@id="project_web_top"]/div[2]/div[1]/div/text()')[0].extract()
-        company['financing'] = \
-            response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[1]/text()')[0].extract().split(u'：')[
-                1]
-        company['created'] = \
-            response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[2]/text()')[0].extract().split(u'：')[
-                1]
-        company['local'] = \
-            response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[3]/text()')[0].extract().split(u'：')[
-                1]
-        company['desc'] = response.xpath('//*[@id="_container_desc"]/text()')[0].extract()
-        company['tags'] = response.xpath('//div[@class="tags"]/a/text()').extract()
-        return company
+        try:
+            company = TianyanchaItem()
+            company['name'] = response.xpath('//*[@id="project_web_top"]/div[2]/div[1]/div/text()')[0].extract()
+            company['financing'] = \
+                response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[1]/text()')[0].extract().split(u'：')[
+                    1]
+            company['created'] = \
+                response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[2]/text()')[0].extract().split(u'：')[
+                    1]
+            company['local'] = \
+                response.xpath('//*[@id="project_web_top"]/div[2]/div[2]/span[3]/text()')[0].extract().split(u'：')[
+                    1]
+            company['desc'] = response.xpath('//*[@id="_container_desc"]/text()')[0].extract()
+            company['tags'] = response.xpath('//div[@class="tags"]/a/text()').extract()
+            return company
+        except Exception:
+            return None
 
     def parse(self, response):
-        yield CompanySpider.get_company(response)
+        company = CompanySpider.get_company(response)
+        if company:
+            yield company
         jingpin = response.xpath("//div[@id='_container_jinpin']")[0].xpath('table/tbody/tr')
         try:
             for x in jingpin:
@@ -42,7 +47,7 @@ class CompanySpider(scrapy.Spider):
 
     def follow_up_parse(self, response):
         yield CompanySpider.get_company(response)
-        if int(response.meta['depth']) <= 2:
+        if int(response.meta['depth']) <= 4:
             jingpin = response.xpath("//div[@id='_container_jinpin']")[0].xpath('table/tbody/tr')
             try:
                 for x in jingpin:

@@ -14,20 +14,19 @@ KEY_WORD = [u'人工智能', u'医疗']
 
 class TianyanchaPipeline(object):
     def __init__(self):
-        self.file = codecs.open('scraped_data.json', 'wb', encoding='utf-8')
+        self.companies = []
 
     def process_item(self, item, spider):
         if str_in_tags(item['tags'], *KEY_WORD):
-            line = json.dumps(dict(item)) + '\n'
-            self.file.write(line.decode("unicode_escape") + ',')
+            # line = json.dumps(dict(item)) + '\n'
+            # self.file.write(line.decode("unicode_escape") + ',')
+            self.companies.append(dict(item))
             return item
         else:
             raise DropItem('Item({}) mismatch'.format(item))
 
-    def open_spider(self, spider):
-        self.file = codecs.open('scraped_data.json', 'wb', encoding='utf-8')
-        self.file.write('[\n')
-
     def close_spider(self, spider):
-        self.file.write('\n]')
-        self.file.close()
+        with codecs.open('scraped_data.json', 'wb', encoding='utf-8') as f:
+            json.dump(self.companies, f, indent=4, ensure_ascii=False)
+        # self.file.write(json.dumps(self.companies).decode("unicode_escape"))
+        # self.file.close()
