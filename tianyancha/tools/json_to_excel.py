@@ -9,7 +9,7 @@ import pyExcelerator
 import json
 import sys
 
-COLUMN = [('name', u'公司名称'), ('created', u'创建时间'), ('financing', u'融资情况'), ('local', u'所在地'), ('tag', '标签'),
+COLUMN = [('name', u'公司名称'), ('created', u'创建时间'), ('financing', u'融资情况'), ('local', u'所在地'), ('tag', u'标签'),
           ('desc', u'简介')]
 
 
