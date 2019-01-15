@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-__title__ = ''
+__title__ = 'save histogram png'
 __author__ = 'changxin'
 __mtime__ = '2019/1/14'
 """
 import json
 from collections import Counter
-import matplotlib
+from matplotlib import pyplot as plt
 
 
 def get_companies(json_file=None):
@@ -25,3 +25,16 @@ def sorted_data(companies_dict):
     t.sort(key=lambda x: x[1], reverse=True)
     return t
 
+
+def show_histogram(data):
+    name_list = [x[0] for x in data]
+    data_list = [x[1] for x in data]
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = [u'SimHei']
+    plt.bar(range(len(data_list)), data_list, color='rgb', tick_label=name_list)
+    plt.savefig('histogram.png')
+    plt.show()
+
+
+if __name__ == '__main__':
+    show_histogram(sorted_data(get_companies()))
